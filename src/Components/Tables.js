@@ -1,5 +1,5 @@
 import BootstrapTable from 'react-bootstrap-table-next';
-import { getPhotos } from '../api';
+import { getPhotos } from '../URL';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import paginationFactory from 'react-bootstrap-table2-paginator';
@@ -16,30 +16,48 @@ console.log(student,"stu");
     const columns = [{
   dataField: 'firstName',
   text: 'FirstName',
-  sort: true
+  sort: true, headerStyle: {
+    backgroundColor: '#004bff',
+    color:"#ffffff" 
+  }
 }, {
   dataField: 'lastName',
   text: 'Last Name',
-  sort: true
+  sort: true, headerStyle: {
+    backgroundColor: '#004bff',
+    color:"#ffffff" 
+  }
 }, {
   dataField: 'email',
   text: 'Email',
-  sort: true
+  sort: true, headerStyle: {
+    backgroundColor: '#004bff',
+    color:"#ffffff" 
+  }
 },{
   dataField: 'description',
   text: 'Description',
-  sort: true
+  sort: true, headerStyle: {
+    backgroundColor: '#004bff',
+    color:"#ffffff" 
+  }
 },{
   dataField: 'imageUrl',
   text: 'Image',
-  sort: true
+  sort: true, headerStyle: {
+    backgroundColor: '#004bff',
+    color:"#ffffff" 
+  }
 },{
   dataField: 'isVerified',
   text: 'isVerified',
-  sort: true
+  sort: true, headerStyle: {
+    backgroundColor: '#004bff',
+    color:"#ffffff" 
+  }
 },];
 const customTotal = (from, to, size) => (
-  <span className="react-bootstrap-table-pagination-total">
+  <span className="react-bootstrap-table-pagination-total bg-primary">
     Showing { from } to { to } of { size } Results
   </span>
 );
@@ -71,9 +89,10 @@ const options = {
   }] // A numeric array is also available. the purpose of above example is custom the text
 };
 console.log(student,options,"sti");
+const rowStyle = { backgroundColor: '#eef2fc',color: '#000000'};
   return (<>
-  <Link className=' btn btn-outline-warning m-3'><span className='text-black'>Add Students</span></Link>
-    
+  
+ <Link to="create" className='btn btn-outline-primary  '>Add </Link>    
     <ToolkitProvider
   keyField="Student"
   data={ student }
@@ -85,9 +104,10 @@ console.log(student,options,"sti");
     props => (
       <div>
        
-        <SearchBar className="border border-warning border-opacity-50" { ...props.searchProps } />
+        <SearchBar className="border border-primary border-opacity-50 fluid" { ...props.searchProps } />
         <hr />
-        <BootstrapTable
+        <BootstrapTable 
+        rowStyle={ rowStyle }
           { ...props.baseProps }
         pagination={ paginationFactory(options) }  />
       </div>
