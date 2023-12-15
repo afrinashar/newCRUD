@@ -1,80 +1,100 @@
-import { Button, NavDropdown, Table } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import {
-  BsThreeDotsVertical,
-  BsPatchCheckFill,
-  BsFillGearFill,
-} from "react-icons/bs";
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { Data } from "../URL";
-import DeleteUser from "./Delete";
+import BootstrapTable from 'react-bootstrap-table-next';
+import { getPhotos } from '../api';
+import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
+import paginationFactory from 'react-bootstrap-table2-paginator';
+import ToolkitProvider, {Search} from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 
-//import AddUser from './Components/Add'   c
-const Cards = () => {
-  const Navigate = useNavigate();
-  const EditUser = () => {
-    Navigate("/update");
-  };
-  const DeleteUser = () => {
-    Navigate("/delete");
-  };
-  const [data, setData] = useState([]);
+  const StudentDetails = () => {
+    const { SearchBar } = Search;
 
-  useEffect(() => {
-    async function getData() {
-      try {
-        const response = await axios.get("http://localhost:3500/items", Data);
-        setData(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
+    const { data: student, isLoading  } = useQuery('Student', getPhotos);
+    if (isLoading) {
+        return <div>Loading...</div>;
       }
-    }
-    getData();
-  }, []);
-  console.log(Data, "data");
-  return (
-    <>
-      <Table striped bordered hover size="sm">
-        <thead>
-          <tr style={{ backgroundColor: "blue",color:"white" }}>
-            <td>Name</td>
-            <td>Email</td>
-            <td>Description</td>
-            <td>
-              <BsFillGearFill style={{color:"white"}} />
-            </td>
-          </tr>
-        </thead>
-        <tbody  style={{backgroundColor:"ButtonShadow"}}>
-          {data.map((data) => (
-            <tr key={data.id}>
-              {" "}
-              <td>
-                {data.first_name} {data.last_name} {data.is_verifed}
-              </td>
-      
-              <td>{data.email}</td>
-              <td>{data.description}</td>
-              <td>
-                <div>
-                  <NavDropdown>
-                    <NavDropdown.Item style={{ border:"white" ,backgroundColor:"green",color:"white"}} onClick={EditUser}>Edit</NavDropdown.Item>
-                    <NavDropdown.Item style={{backgroundColor:"red",color:"white"}} onClick={DeleteUser}>
-                      Delete
-                    </NavDropdown.Item>
-                  </NavDropdown>
-                  
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      <Button></Button>uygyu
-    </>
-  );
+console.log(student,"stu");
+    const columns = [{
+  dataField: 'firstName',
+  text: 'FirstName',
+  sort: true
+}, {
+  dataField: 'lastName',
+  text: 'Last Name',
+  sort: true
+}, {
+  dataField: 'email',
+  text: 'Email',
+  sort: true
+},{
+  dataField: 'description',
+  text: 'Description',
+  sort: true
+},{
+  dataField: 'imageUrl',
+  text: 'Image',
+  sort: true
+},{
+  dataField: 'isVerified',
+  text: 'isVerified',
+  sort: true
+},];
+const customTotal = (from, to, size) => (
+  <span className="react-bootstrap-table-pagination-total">
+    Showing { from } to { to } of { size } Results
+  </span>
+);
+
+const options = {
+  paginationSize: 4,
+  pageStartIndex: 0,
+  // alwaysShowAllBtns: true, // Always show next and previous button
+  // withFirstAndLast: false, // Hide the going to First and Last page button
+  // hideSizePerPage: true, // Hide the sizePerPage dropdown always
+  // hidePageListOnlyOnePage: true, // Hide the pagination list when only one page
+  firstPageText: 'First',
+  prePageText: 'Back',
+  nextPageText: 'Next',
+  lastPageText: 'Last',
+  nextPageTitle: 'First page',
+  prePageTitle: 'Pre page',
+  firstPageTitle: 'Next page',
+  lastPageTitle: 'Last page',
+  showTotal: true,
+  paginationTotalRenderer: customTotal,
+  disablePageTitle: true,
+  sizePerPageList: [{
+    text: '5', value: 5
+  }, {
+    text: '10', value: 10
+  }, {
+    text: 'All', value: student.length
+  }] // A numeric array is also available. the purpose of above example is custom the text
 };
-export default Cards;
+console.log(student,options,"sti");
+  return (<>
+  <Link className=' btn btn-outline-warning m-3'><span className='text-black'>Add Students</span></Link>
+    
+    <ToolkitProvider
+  keyField="Student"
+  data={ student }
+  columns={ columns }
+  search
+ 
+>
+  {
+    props => (
+      <div>
+       
+        <SearchBar className="border border-warning border-opacity-50" { ...props.searchProps } />
+        <hr />
+        <BootstrapTable
+          { ...props.baseProps }
+        pagination={ paginationFactory(options) }  />
+      </div>
+    )
+  }
+</ToolkitProvider>
+ 
+  </>)
+}
+export default StudentDetails
