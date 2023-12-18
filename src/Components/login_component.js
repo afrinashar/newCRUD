@@ -1,14 +1,15 @@
 import React, { Component, useState } from "react";
-
+import { Card } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+const navigation=useNavigate()
   function handleSubmit(e) {
     e.preventDefault();
 
     console.log(email, password);
-    fetch("http://localhost:5000/login-user", {
+    fetch("http://localhost:3003/login", {
       method: "POST",
       crossDomain: true,
       headers: {
@@ -24,24 +25,27 @@ export default function Login() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data, "userRegister");
-        if (data.status == "ok") {
+      
+         if (data.status === "Login Success") {
           alert("login successful");
-          window.localStorage.setItem("token", data.data);
           window.localStorage.setItem("loggedIn", true);
+          window.localStorage.setItem("token", data.data);
+         // window.localStorage.setItem("loggedIn", true);
 
-          window.location.href = "./userDetails";
+          navigation("/") 
         }
+        navigation("/") 
       });
   }
 
   return (
     <div className="auth-wrapper">
-      <div className="auth-inner">
-        <form onSubmit={handleSubmit}>
-          <h3>Sign In</h3>
+      <div className="auth-inner d-flex justify-content-center align-items-center w-50 mt-5">
+    <Card className="card w-25 m-5 p-5 w-75 ">   <form onSubmit={handleSubmit}>
+          <h3>Log In</h3>
 
-          <div className="mb-3">
-            <label>Email address</label>
+          <div className="mb-3 h-25">
+            <label className="text-bold">Email address</label>
             <input
               type="email"
               className="form-control"
@@ -72,16 +76,16 @@ export default function Login() {
               </label>
             </div>
           </div>
-
-          <div className="d-grid">
-            <button type="submit" className="btn btn-primary">
+<div className="bottom float-end ">
+          <div className="  ">
+            <button type="submit" className="btn btn-primary p-2 btn-sm active">
               Submit
             </button>
           </div>
           <p className="forgot-password text-right">
             <a href="/sign-up">Sign Up</a>
-          </p>
-        </form>
+          </p></div>
+        </form></Card> 
       </div>
     </div>
   );

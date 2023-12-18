@@ -4,7 +4,11 @@ import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import ToolkitProvider, {Search} from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
-
+import {
+  BsListUl,
+  BsThreeDotsVertical,
+  BsGrid3X3,
+} from "react-icons/bs";
   const StudentDetails = () => {
     const { SearchBar } = Search;
 
@@ -39,16 +43,10 @@ console.log(student,"stu");
   text: 'Description',
   sort: true, headerStyle: {
     backgroundColor: '#004bff',
-    color:"#ffffff" 
+    color:"#ffffff" ,
+    
   }
-},{
-  dataField: 'imageUrl',
-  text: 'Image',
-  sort: true, headerStyle: {
-    backgroundColor: '#004bff',
-    color:"#ffffff" 
-  }
-},{
+} ,{
   dataField: 'isVerified',
   text: 'isVerified',
   sort: true, headerStyle: {
@@ -57,8 +55,8 @@ console.log(student,"stu");
   }
 },];
 const customTotal = (from, to, size) => (
-  <span className="react-bootstrap-table-pagination-total bg-primary">
-    Showing { from } to { to } of { size } Results
+  <span className="react-bootstrap-table-pagination-total  ">
+    Showing <span className='text-primary'>{ from }</span> to <span className='text-primary'>{ to }</span> of <span className='text-primary text-bold'>{ size }</span> Results
   </span>
 );
 
@@ -90,13 +88,34 @@ const options = {
 };
 console.log(student,options,"sti");
 const rowStyle = { backgroundColor: '#eef2fc',color: '#000000'};
+
+ 
   return (<>
+  <nav className="navbar   top-0 navbar-light sticky-top bg-primary"  >
+  <div className="container-fluid bg-primary top-0  sticky-top">
+   
+    <Link to="create" className='btn btn-outline-light  '>Add </Link>
+    <Link className="btn btn-outline-light" to={"/"}>
+                      <BsListUl />
+                    </Link>
+                  
+                 
+                    <Link className="btn btn-outline-light" to={"tables"}>
+                    <BsGrid3X3 className='' />
+                    </Link>
+                    <h1 className='text-white'>Celebrities Gallery</h1>
+    <form className="d-flex input-group w-auto">
   
+      
+    </form>
+  </div>
+</nav>
  <Link to="create" className='btn btn-outline-primary  '>Add </Link>    
     <ToolkitProvider
   keyField="Student"
   data={ student }
   columns={ columns }
+ 
   search
  
 >
@@ -106,7 +125,7 @@ const rowStyle = { backgroundColor: '#eef2fc',color: '#000000'};
        
         <SearchBar className="border border-primary border-opacity-50 fluid" { ...props.searchProps } />
         <hr />
-        <BootstrapTable 
+        <BootstrapTable  className="m-3"
         rowStyle={ rowStyle }
           { ...props.baseProps }
         pagination={ paginationFactory(options) }  />

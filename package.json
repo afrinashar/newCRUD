@@ -2,6 +2,7 @@
   "name": "login",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:3000",
   "dependencies": {
     "@tanstack/react-query": "^5.13.4",
     "@testing-library/jest-dom": "^5.16.5",
@@ -28,6 +29,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "proxy": "http://localhost:3000",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

@@ -1,33 +1,34 @@
 import React, { Component, useState } from "react";
-
+import { Card } from "react-bootstrap";
+import { API_BASE_URL } from "../URL";
 export default function SignUp() {
-  const [fname, setFname] = useState("");
-  const [lname, setLname] = useState("");
+  const [firstName, setfirstName] = useState("");
+  const [lastName, setlastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userType, setUserType] = useState("");
   const [secretKey, setSecretKey] = useState("");
 
   const handleSubmit = (e) => {
-    if (userType == "Admin" && secretKey != "AdarshT") {
+    if (userType == "Admin" && secretKey != "afrinj") {
       e.preventDefault();
       alert("Invalid Admin");
     } else {
       e.preventDefault();
 
-      console.log(fname, lname, email, password);
-      fetch("http://localhost:5000/register", {
+      console.log(firstName, lastName, email, password);
+      fetch(`http://localhost:3003/register`, {
         method: "POST",
         crossDomain: true,
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",
+          "Accept": "application/json",
           "Access-Control-Allow-Origin": "*",
         },
         body: JSON.stringify({
-          fname,
+          firstName,
           email,
-          lname,
+          lastName,
           password,
           userType,
         }),
@@ -46,7 +47,8 @@ export default function SignUp() {
 
   return (
     <div className="auth-wrapper">
-      <div className="auth-inner">
+     <div className="auth-inner d-flex justify-content-center align-items-center mt-5">
+    <Card className="card w-50 m-5 p-5"> 
         <form onSubmit={handleSubmit}>
           <h3>Sign Up</h3>
           <div>
@@ -84,7 +86,7 @@ export default function SignUp() {
               type="text"
               className="form-control"
               placeholder="First name"
-              onChange={(e) => setFname(e.target.value)}
+              onChange={(e) => setfirstName(e.target.value)}
             />
           </div>
 
@@ -94,7 +96,7 @@ export default function SignUp() {
               type="text"
               className="form-control"
               placeholder="Last name"
-              onChange={(e) => setLname(e.target.value)}
+              onChange={(e) => setlastName(e.target.value)}
             />
           </div>
 
@@ -119,14 +121,14 @@ export default function SignUp() {
           </div>
 
           <div className="d-grid">
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary w-25">
               Sign Up
             </button>
           </div>
           <p className="forgot-password text-right">
             Already registered <a href="/sign-in">sign in?</a>
           </p>
-        </form>
+        </form></Card>
       </div>
     </div>
   );
