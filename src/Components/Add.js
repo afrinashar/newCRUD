@@ -1,132 +1,143 @@
-import React from "react";
-import axios from "axios";
-import { useState } from "react";
-import { Button, Row, Col, Form, Modal } from "react-bootstrap";
-import { Data } from "../URL";
-import { useNavigate } from "react-router-dom";
-import "./Add.css";
-const AddUser = () => {
-  const [data, setData] = useState("");
-  const [imageUrl, setimageUrl] = useState("");
-  const [firstName, setfirstName] = useState("");
-  const [lastName, setlastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [description, setDescription] = useState("");
-  const [is_verified, setis_verified] = useState("");
-  const [showModal, setShow] = useState(true);
+import React, { useState } from 'react';
+import { Button, Modal } from 'react-bootstrap';
+import { useMutation } from 'react-query';
+import { createPhoto } from '../URL';
+import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from 'react-query';
+const CreatePhoto = () => {
+  const [showModal, setShowModal] = useState(true);
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const mutation = useMutation(createPhoto, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('photos');
+      console.log('Image created successfully');
+      navigate('/');
+    },
+    onError: (error) => {
+      console.error('Error creating image:', error.respose.data);
+    },
+  });
 
-  // const handleShow () => {
-  //   setShow(true);
-  // };
-  const Navigate = useNavigate();
-  const handleClose = async () => {
-    //id=Data.length?(Data[Data.length -1].id +1):1
-    try {
-      const response = await axios.post(Data, {
-        // id,
-        firstName,
-        lastName,
-        email,
-        is_verified,
-        imageUrl,
-        description,
-      });
-      // setData(response.data)
-      //console.log(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-    Navigate("/");
+  const [photoData, setPhotoData] = useState({
+    name: '',
+    description: '',
+    imageUrl: '',
+  });
+
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    mutation.mutate(photoData);
+    console.log(photoData,(typeof(photoData.imageUrl.name)),(typeof(photoData.imageUrl)),"photooo");
   };
+
+  const handleClose = () => {
+    setPhotoData({
+      name: '',
+      description: '',
+      imageUrl: {
+        name:""
+      },
+    });
+    setShowModal(false);
+    navigate('/');
+  };
+
+  const handleChange = (e) => {
+    const { name, value} = e.target;
+   // console.log((e.target),"name:",name,"value:",value,files); 
+    setPhotoData((prevData) => ({
+      ...prevData,
+      [name]: value,
+
+
+    }  
+    ));
+  };
+const handleChangePhoto=(e)=>{
+setPhotoData((prevData)=>({
+  ...prevData,
+  imageUrl:e.target.files[0]
+  
+}))
+console.log((e.target.files[0].name),"file");
+}
   return (
-    <>
-      <div
-        className="modal show"
-        style={{ display: "block", position: "initial" }}
-      >
-        <Modal show={showModal} key={data.id} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Create Profile</Modal.Title>
-          </Modal.Header>
-          <Form>
-            <Modal.Body>
-              <div className="add-addform">
-                <div>
-                  <div className="addform">
-                    <label id="lastname">url</label>
-                    <input
-                      id="urlname"
-                      type="text"
-                      value={imageUrl}
-                      onChange={(e) => setimageUrl(e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div className="addform">
-                  <label id="fname">First Name {firstName}</label>
-                  <input
-                    id="fname"
-                    type="text"
-                    value={firstName}
-                    onChange={(e) => setfirstName(e.target.value)}
-                  />
-                </div>
-                <div>
-                  <div className="addform">
-                    <label id="lastname">Last Name</label>
-                    <input
-                      id="lastname"
-                      type="text"
-                      value={lastName}
-                      onChange={(e) => setlastName(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className="addform">
-                  <label>Email</label>
-                  <input
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    type="email"
-                  />
-                </div>
-                <div className="addform">
-                  <label>Description</label>
-                  <textarea
-                    as="textarea"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="write a description for a talent"
-                  />
-                </div>
-
-                <div
-                  style={{ backgroundColor: "#e3e3e3" }}
-                  className="form-check form-switch d-flex  p-1 justify-content-end"
-                >
-                  <label className="verify"> Talent is Verified</label>
-
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    id="flexSwitchCheckChecked"
-                    checked={is_verified}
-                    onChange={setis_verified(!is_verified)}
-                  ></input>
-                </div>
-              </div>
-            </Modal.Body>
-
-            <Modal.Footer>
-              <Button type="button" variant="primary" onClick={handleClose}>
-                Create
-              </Button>
-            </Modal.Footer>
-          </Form>
-        </Modal>
+    <div>
+    <Modal show={showModal} onHide={handleClose}>
+      <div className="modal-header bg-primary">
+        <h3 className="modal-title text-white m-3">Add Profile</h3>
+        <button
+          type="button"
+          className="close rounded-circle p-2 bg-light "
+          onClick={handleClose}
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-    </>
+      <form onSubmit={handleCreate}>
+        <Modal.Body>
+          <div className="form-group">
+            <label className='font-weight-bold' htmlFor="name"> <h6 className='font-weight-bold'>First Name:</h6></label>
+            <input
+              type="text"
+              className="form-control"
+              id="name"
+              name="name"
+              value={photoData.firstName}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="name"><h6 className='m-3'>Last Name:</h6></label>
+            <input
+              type="text"
+              className="form-control"
+              id="name"
+              name="name"
+              value={photoData.lastName}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="name"><h6 className='m-3'>Email:</h6></label>
+            <input
+              type="email"
+              className="form-control"
+              id="name"
+              name="name"
+              value={photoData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="description"><h6 className='m-3'>Description:</h6></label>
+            <textarea
+              className="form-control"
+              id="description"
+              name="description"
+              value={photoData.description}
+              onChange={handleChange}
+            />
+          </div>
+          {/* You might want to handle the image separately based on your use case */}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button type="submit" variant="primary">
+            Add Celebrity
+          </Button>
+          <Button variant="danger" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </form>
+    </Modal>
+  </div>
   );
 };
-export default AddUser;
+
+export default CreatePhoto;
