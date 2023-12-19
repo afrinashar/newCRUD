@@ -90,6 +90,18 @@ email:'',    description: '',
         </div>
         <form onSubmit={handleUpdate}>
           <Modal.Body>
+          <div className="form-group">
+              <label className='font-weight-bold' htmlFor="name"> <h6 className='font-weight-bold'>First Name:</h6></label>
+              <input
+                type="text"
+                className="form-control"
+                id="name"
+                name="name"
+                value={photoData.firstName}
+                onChange={handleChange}
+                required
+              />
+            </div>
             <div className="form-group">
               <label className='font-weight-bold' htmlFor="name"> <h6 className='font-weight-bold'>First Name:</h6></label>
               <input

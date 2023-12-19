@@ -11,7 +11,10 @@ import {
 } from "react-icons/bs";
   const StudentDetails = () => {
     const { SearchBar } = Search;
-
+    const logOut = () => {
+      window.localStorage.clear();
+      window.location.href = "./sign-in";
+    };
     const { data: student, isLoading  } = useQuery('Student', getPhotos);
     if (isLoading) {
         return <div>Loading...</div>;
@@ -94,13 +97,13 @@ const rowStyle = { backgroundColor: '#eef2fc',color: '#000000'};
   <nav className="navbar   top-0 navbar-light sticky-top bg-primary"  >
   <div className="container-fluid bg-primary top-0  sticky-top">
    
-    <Link to="create" className='btn btn-outline-light  '>Add </Link>
+    <Link to="/create" className='btn btn-outline-light  '>Add </Link>
     <Link className="btn btn-outline-light" to={"/"}>
                       <BsListUl />
                     </Link>
                   
                  
-                    <Link className="btn btn-outline-light" to={"tables"}>
+                    <Link className="btn btn-outline-light" to={"/tables"}>
                     <BsGrid3X3 className='' />
                     </Link>
                     <h1 className='text-white'>Celebrities Gallery</h1>
@@ -108,9 +111,10 @@ const rowStyle = { backgroundColor: '#eef2fc',color: '#000000'};
   
       
     </form>
+    <button className='btn btn-danger' onClick={logOut}> LOG OUT</button>
   </div>
 </nav>
- <Link to="create" className='btn btn-outline-primary  '>Add </Link>    
+   
     <ToolkitProvider
   keyField="Student"
   data={ student }

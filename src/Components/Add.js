@@ -20,9 +20,12 @@ const CreatePhoto = () => {
   });
 
   const [photoData, setPhotoData] = useState({
-    name: '',
-    description: '',
     imageUrl: '',
+    firstName:'',
+    lastName:'',
+email:'' ,
+  description: '',
+    
   });
 
   const handleCreate = async (e) => {
@@ -33,11 +36,12 @@ const CreatePhoto = () => {
 
   const handleClose = () => {
     setPhotoData({
-      name: '',
-      description: '',
-      imageUrl: {
-        name:""
-      },
+      imageUrl: '',
+      firstName:'',
+      lastName:'',
+  email:'' ,
+    description: ''
+      
     });
     setShowModal(false);
     navigate('/');
@@ -78,6 +82,19 @@ console.log((e.target.files[0].name),"file");
       </div>
       <form onSubmit={handleCreate}>
         <Modal.Body>
+        <div className="form-group">
+            <label className='font-weight-bold' htmlFor="name"> <h6 className='font-weight-bold'>Image Url:</h6></label>
+            <input
+              type="text"
+              className="form-control"
+              id="name"
+              name="name"
+              accept='image/png'
+              //value={photoData.imageUrl}
+              onChange={handleChangePhoto}
+              required
+            />
+          </div>
           <div className="form-group">
             <label className='font-weight-bold' htmlFor="name"> <h6 className='font-weight-bold'>First Name:</h6></label>
             <input

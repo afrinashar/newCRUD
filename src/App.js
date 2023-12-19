@@ -36,13 +36,13 @@ function App() {
           <>
             
               <Routes>
-                <Route exact path="create" element={<AddUser />} />
+                <Route exact path="/create" element={<AddUser />} />
                 <Route  exact path="/" element={isLoggedIn == "true" ? <Cards></Cards>:<Login />} />
                 <Route path="/sign-in" element={<Login />} />
           <Route path="/sign-up" element={<SignUp />} />
-                <Route exact path="tables" element={<Tables />} />
-                <Route exact path="delete/id" element={<DeleteUser />} />
-                <Route exact path="update/:id" element={<UpdateUser />} />
+                <Route exact path="/tables" element={<Tables />} />
+                <Route exact path="/delete/id" element={<DeleteUser />} />
+                <Route exact path="/update/:id" element={<UpdateUser />} />
               </Routes>
               <Outlet />
             

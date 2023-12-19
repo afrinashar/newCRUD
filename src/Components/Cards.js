@@ -1,7 +1,8 @@
 import React, { useState,useRef } from 'react';
 import { useQuery } from 'react-query';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getPhotos } from '../URL';
+import { Navigate } from 'react-router-dom';
 //import PhotoDetails from './PhotoDetails';
 import {
   BsListUl,
@@ -20,7 +21,7 @@ const PhotoList = () => {
   const [show, setShow] = useState(false);
   const { data: photos, isLoading, isError,isFetching } = useQuery(['photos', searchTerm], () => getPhotos(searchTerm), {staleTime:3000});
 const celeb = useRef();
-
+ const navigation =useNavigate()
   if (isLoading || isFetching) {
     return <><Spinner></Spinner></>
   }
@@ -38,6 +39,12 @@ const celeb = useRef();
   const filteredPhotos = photos.filter((photo) =>
     photo.firstName.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  //logout
+  const logOut = () => {
+    window.localStorage.clear();
+    window.location.href = "./sign-in";
+  };
+
   var handleItemClick = (photo) => {
     setEdit(photo)
    //  const{(edit) }= edit
@@ -71,8 +78,8 @@ const celeb = useRef();
       {/* Search bar */}
      
 <nav className="navbar   top-0 navbar-light sticky-top bg-primary"  >
-  <div className="container-fluid bg-primary top-0  sticky-top">
-   
+  
+   <div className="container-fluid bg-primary top-0  sticky-top">
     <Link to="create" className='btn btn-outline-light  '>Add </Link>
     <Link className="btn btn-outline-light float-start  float-left m-0" data-bs-toggle="tooltip" data-bs-html="true" title="CARD " to={"/"}>
                       <BsListUl />
@@ -80,7 +87,7 @@ const celeb = useRef();
                   
                  
                     <Link className="btn btn-outline-light" data-bs-toggle="tooltip" data-bs-html="true" title=" TABLE " to={"tables"}>
-                    <BsGrid3X3 className='' />
+                    <BsGrid3X3 className='p-0'  width="160" height="16"/>
                     </Link>
                     <h1 className='text-white'>Celebrities Gallery</h1>
     <form className="d-flex input-group w-auto">
@@ -95,6 +102,7 @@ const celeb = useRef();
       />
       
     </form>
+    <button onClick={logOut} className='btn btn-danger'>logOut</button>
   </div>
 </nav>
       <div className="row p-5">
@@ -117,21 +125,23 @@ const celeb = useRef();
          
           <Modal.Title className='text '> {edit.firstName}  {edit.lastName}</Modal.Title>
         </Modal.Header>
-        <Modal.Body> <div class="bg-image hover-zoom"><Image  className='w-100'   src={edit.imageUrl}  /> </div></Modal.Body>
+        <Modal.Body> <div class="bg-image hover-zoom"><Image  className='w-100'   src={edit.imageUrl}  /> </div>
+        <FaArrowAltCircleDown variant="success"  className='bg-success' width="32" height="32" fill="currentColor"  type="button" onClick={() => handleDownload(edit.imageUrl, edit.title)} ></FaArrowAltCircleDown> 
+
+        </Modal.Body>
         <Modal.Footer>
 
         <div className='d-flex flex-row justify-content-around'><h6> </h6><p>{edit.description}</p>  </div>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="outline-primary" onClick={handleClose}>
             Close
           </Button>
           
-          <FaArrowAltCircleDown variant="success"  className='bg-primary ' type="button" onClick={() => handleDownload(edit.imageUrl, edit.title)} ></FaArrowAltCircleDown> 
         
            
-                <DropdownButton  className=''   >
+                <DropdownButton  className='btn btn-outline-primary'   >
 
       <Dropdown.Item   className='  text-light  ' >    <Link to={`/update/${edit._id}`}>Update</Link> </Dropdown.Item>
-      <Dropdown.Item className='bg-primary text-light '  ><Link to={`/delete/${edit._id}`}>Delete</Link></Dropdown.Item>
+      <Dropdown.Item className=' text-light '  ><Link to={`/delete/${edit._id}`}>Delete</Link></Dropdown.Item>
   
     </DropdownButton>
    
