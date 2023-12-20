@@ -6,6 +6,8 @@ import axios from 'axios';
 import { useMutation, useQueryClient } from 'react-query';
 import { deletePhoto } from '../URL';
 import { useParams } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function DeleteUser() {
   const Navigate = useNavigate() 
@@ -25,7 +27,7 @@ function DeleteUser() {
   }
 
   return (
-    <div
+  <> <div
       className="modal show"
       style={{ display: "block", position: "initial" }}
     >
@@ -44,7 +46,18 @@ function DeleteUser() {
         </Modal.Footer>
       </Modal.Dialog>
     </div>
-  );
+   <ToastContainer
+   position="top-right"
+   autoClose={5000}
+   hideProgressBar={false}
+   newestOnTop={false}
+   closeOnClick
+   rtl={false}
+   pauseOnFocusLoss
+   draggable
+   pauseOnHover
+   theme="light"
+   /></>  );
 }
 
 export default DeleteUser;

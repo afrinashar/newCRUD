@@ -9,9 +9,12 @@ import {
   BsThreeDotsVertical,
   BsGrid3X3,
 } from "react-icons/bs";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import Spinner from '../Components/spinner';
 import {Button,Card, Modal,Form,Row,Col,Container,DropdownButton,Dropdown,Image} from 'react-bootstrap';
-//import DeletePhoto from './DeletePhoto';
+//import DeletePhoto      from './DeletePhoto';
 import { FaArrowAltCircleDown } from "react-icons/fa";
 import { useEffect } from 'react';
  
@@ -25,10 +28,13 @@ const celeb = useRef();
   if (isLoading || isFetching) {
     return <><Spinner></Spinner></>
   }
- 
+  var notifyError = () => toast.error("Error fetching photos");
   if (isError) {
-    return <div>Error fetching photos</div>;
-  }
+    return  <> 
+   
+    notifyError()
+    <div>Error fetching photos</div></>;
+  } 
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -42,6 +48,8 @@ const celeb = useRef();
   //logout
   const logOut = () => {
     window.localStorage.clear();
+    var notifySuccess = () => toast.success("Logout successfully");
+    notifySuccess()
     window.location.href = "./sign-in";
   };
 
@@ -89,7 +97,7 @@ const celeb = useRef();
                     <Link className="btn btn-outline-light" data-bs-toggle="tooltip" data-bs-html="true" title=" TABLE " to={"tables"}>
                     <BsGrid3X3 className='p-0'  width="160" height="16"/>
                     </Link>
-                    <h1 className='text-white'>Celebrities Gallery</h1>
+                    <h1 className='text-white'> Gallery</h1>
     <form className="d-flex input-group w-auto">
     <input
    
@@ -126,22 +134,17 @@ const celeb = useRef();
           <Modal.Title className='text '> {edit.firstName}  {edit.lastName}</Modal.Title>
         </Modal.Header>
         <Modal.Body> <div class="bg-image hover-zoom"><Image  className='w-100'   src={edit.imageUrl}  /> </div>
-        <FaArrowAltCircleDown variant="success"  className='bg-success' width="32" height="32" fill="currentColor"  type="button" onClick={() => handleDownload(edit.imageUrl, edit.title)} ></FaArrowAltCircleDown> 
-
         </Modal.Body>
         <Modal.Footer>
 
         <div className='d-flex flex-row justify-content-around'><h6> </h6><p>{edit.description}</p>  </div>
-          <Button variant="outline-primary" onClick={handleClose}>
+        <button className=' float-start m-1 btn btn-success rounded-circle border border-dark' onClick={() => handleDownload(edit.imageUrl, edit.title)}><FaArrowAltCircleDown/></button>
+  <Button variant="outline-primary" onClick={handleClose}>
             Close
-          </Button>
-          
-        
-           
-                <DropdownButton  className='btn btn-outline-primary'   >
+          </Button>  <DropdownButton  className=' '   >
 
       <Dropdown.Item   className='  text-light  ' >    <Link to={`/update/${edit._id}`}>Update</Link> </Dropdown.Item>
-      <Dropdown.Item className=' text-light '  ><Link to={`/delete/${edit._id}`}>Delete</Link></Dropdown.Item>
+      <Dropdown.Item className=' text-white '  ><Link to={`/delete/${edit._id}`}>Delete</Link></Dropdown.Item>
   
     </DropdownButton>
    
@@ -162,7 +165,18 @@ const celeb = useRef();
       <a class="page-link" href="#">Next</a>
     </li>
   </ul>
-</nav> </>);
+</nav>   <ToastContainer
+position="top-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="light"
+/> </>);
 };
 
 

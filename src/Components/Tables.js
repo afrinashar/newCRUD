@@ -9,16 +9,29 @@ import {
   BsThreeDotsVertical,
   BsGrid3X3,
 } from "react-icons/bs";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Spinner from '../Components/spinner';
   const StudentDetails = () => {
     const { SearchBar } = Search;
     const logOut = () => {
       window.localStorage.clear();
       window.location.href = "./sign-in";
     };
-    const { data: student, isLoading  } = useQuery('Student', getPhotos);
+    const { data: student, isLoading,isError  } = useQuery('Student', getPhotos);
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <><Spinner></Spinner></>
       }
+      var notifyError = () => toast.success("Logged In success");
+      //notifyError()
+      var notifySuccess = () => toast.success("Logged In success");
+  if (isError) {
+    return  <> 
+   
+    notifyError()
+    <div>Error fetching photos</div></>;
+  } 
+
 console.log(student,"stu");
     const columns = [{
   dataField: 'firstName',
@@ -137,7 +150,18 @@ const rowStyle = { backgroundColor: '#eef2fc',color: '#000000'};
     )
   }
 </ToolkitProvider>
- 
+<ToastContainer
+position="top-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="light"
+/>
   </>)
 }
 export default StudentDetails

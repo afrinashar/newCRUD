@@ -12,7 +12,7 @@ import { useMutation, useQuery } from 'react-query';
 import { getPhotoById, updatePhoto } from '../URL'; // Assuming you have an API function to get and update a photo
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-
+import Spinner from './spinner';
 const UpdateUser = () => {
   const [showModal, setShowModal] = useState(true);
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ email:'',    description: '',
   useEffect(() => {
     if (existingPhoto) {
       setPhotoData({
-        firstNameame: existingPhoto.firstName,
+        firstName: existingPhoto.firstName,
         lastName: existingPhoto.lastName,
         email:existingPhoto.email,
         description: existingPhoto.description,
@@ -54,7 +54,7 @@ email:'',    description: '',
 
   const handleUpdate = (e) => {
     e.preventDefault();
-    mutation.mutate({ id, data: id });
+    mutation.mutate({ id, data: "getPhoto" });
   };
 
   const handleClose = () => {
@@ -71,7 +71,7 @@ email:'',    description: '',
   };
 
   if (photoLoading) {
-    return <p>Loading...</p>;
+    return <><Spinner></Spinner></>
   }
 
   return (
@@ -90,18 +90,7 @@ email:'',    description: '',
         </div>
         <form onSubmit={handleUpdate}>
           <Modal.Body>
-          <div className="form-group">
-              <label className='font-weight-bold' htmlFor="name"> <h6 className='font-weight-bold'>First Name:</h6></label>
-              <input
-                type="text"
-                className="form-control"
-                id="name"
-                name="name"
-                value={photoData.firstName}
-                onChange={handleChange}
-                required
-              />
-            </div>
+          
             <div className="form-group">
               <label className='font-weight-bold' htmlFor="name"> <h6 className='font-weight-bold'>First Name:</h6></label>
               <input

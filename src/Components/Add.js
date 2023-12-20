@@ -4,6 +4,10 @@ import { useMutation } from 'react-query';
 import { createPhoto } from '../URL';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 const CreatePhoto = () => {
   const [showModal, setShowModal] = useState(true);
   const navigate = useNavigate();
@@ -11,13 +15,17 @@ const CreatePhoto = () => {
   const mutation = useMutation(createPhoto, {
     onSuccess: () => {
       queryClient.invalidateQueries('photos');
-      console.log('Image created successfully');
-      navigate('/');
+ var notifySuccess = () => toast.success('Image created successfully');
+     notifySuccess()
+ navigate('/');
     },
     onError: (error) => {
-      console.error('Error creating image:', error.respose.data);
+     
+        var notifyError = () => toast.error('Error creating image:', error.respose.data);
+     notifyError()
     },
   });
+   
 
   const [photoData, setPhotoData] = useState({
     imageUrl: '',
@@ -66,7 +74,7 @@ setPhotoData((prevData)=>({
 }))
 console.log((e.target.files[0].name),"file");
 }
-  return (
+  return (<>
     <div>
     <Modal show={showModal} onHide={handleClose}>
       <div className="modal-header bg-primary">
@@ -154,7 +162,18 @@ console.log((e.target.files[0].name),"file");
       </form>
     </Modal>
   </div>
-  );
+   <ToastContainer
+   position="top-right"
+   autoClose={5000}
+   hideProgressBar={false}
+   newestOnTop={false}
+   closeOnClick
+   rtl={false}
+   pauseOnFocusLoss
+   draggable
+   pauseOnHover
+   theme="light"
+   /> </>);
 };
 
 export default CreatePhoto;

@@ -2,6 +2,9 @@
 import React, { Component, useState } from "react";
 import { Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +31,7 @@ const navigation=useNavigate()
         console.log(data, "userRegister");
       
          if (data.status === "Login Success") {
-          alert("login successful");
+          notifySuccess()
           window.location.href = "./";
           window.localStorage.setItem("loggedIn", true);
           window.localStorage.setItem("token", data.data);
@@ -36,10 +39,15 @@ const navigation=useNavigate()
 
          
         }
+        else{
+        var notifyError = () => toast.success("Logged In success");
+     notifyError()
+        }
         navigation("/") 
       });
   }
-
+ var notifySuccess = () => toast.success("Logged In success");
+ 
   return (
     <div className="auth-wrapper">
       <div className="auth-inner d-flex justify-content-center align-items-center w-50 mt-5">
@@ -88,6 +96,18 @@ const navigation=useNavigate()
           Not yet to register  <a href="/sign-up"> Sign Up</a>
           </p></div>
         </form></Card> 
+        <ToastContainer
+position="top-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="light"
+/>
       </div>
     </div>
   );
