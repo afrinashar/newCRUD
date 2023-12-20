@@ -1,27 +1,35 @@
-import React from "react"
-import axios from "axios"
-import { useState } from "react"
+import React from "react";
+import axios from "axios";
+import { useState } from "react";
 import { Button, Row, Col, Form, Modal } from "react-bootstrap";
-import {API_URL} from "../URL"
+import { API_URL } from "../URL";
 import { useNavigate } from "react-router-dom";
 const AddUser = () => {
-  const [first_name, setfirst_name] = useState("");
-  const [last_name, setlast_name] = useState("")
-  const [email, setEmail] = useState("")
-  const [description, setDescription] = useState("")
-  const [showModal, setShow] = useState(true)
+  const [firstName, setfirstName] = useState("");
+  const [lastName, setlastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [description, setDescription] = useState("");
+  const [showModal, setShow] = useState(true);
   // const handleShow () => {
   //   setShow(true);
   // };
-  const Navigate = useNavigate()
+  const Navigate = useNavigate();
   const handleClose = async (e) => {
-   const res = await axios.post(API_URL, first_name,
-    last_name,description,email)
-  console.log("Correct Header Status:", res.data.data.getAllProfiles.profiles)
+    const res = await axios.post(
+      API_URL,
+      firstName,
+      lastName,
+      description,
+      email
+    );
+    console.log(
+      "Correct Header Status:",
+      res.data.data.getAllProfiles.profiles
+    );
     //console.log( "name");
-   // setShow(false)
-   Navigate('/cards')
-     e.preventDefault()
+    // setShow(false)
+    Navigate("/cards");
+    e.preventDefault();
   };
   return (
     <>
@@ -39,22 +47,23 @@ const AddUser = () => {
                 <Col lg={12} sm={4}>
                   <Form.Group className="mb-3 xs-12">
                     <label>Enter Link </label>
-                    <input type="text" 
-                    value={first_name}
-                    onChange={(e) => setfirst_name(e.target.value)}
+                    <input
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setfirstName(e.target.value)}
                     ></input>
                   </Form.Group>
                 </Col>
-                <Col    >
+                <Col>
                   <Form.Group
                     className="mb-3 md-6"
                     controlId="exampleinputInput1"
                   >
-                    <label>First Name {first_name}</label>
+                    <label>First Name {firstName}</label>
                     <input
                       type="text"
-                      value={first_name}
-                      onChange={(e) => setfirst_name(e.target.value)}
+                      value={firstName}
+                      onChange={(e) => setfirstName(e.target.value)}
                     />
                   </Form.Group>
                 </Col>
@@ -63,8 +72,8 @@ const AddUser = () => {
                     <label>Last Name</label>
                     <input
                       type="text"
-                      value={last_name}
-                      onChange={(e) => setlast_name(e.target.value)}
+                      value={lastName}
+                      onChange={(e) => setlastName(e.target.value)}
                     />
                   </Form.Group>
                 </Col>
@@ -92,7 +101,6 @@ const AddUser = () => {
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       placeholder="write a description for a talent"
-                      
                     />
                   </Form.Group>
                 </Col>
@@ -110,7 +118,7 @@ const AddUser = () => {
                   </div>
                 </Col>
               </Row>
-            </Modal.Body>   
+            </Modal.Body>
 
             <Modal.Footer>
               <Button type="submit" variant="primary" onClick={handleClose}>

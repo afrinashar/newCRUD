@@ -1,142 +1,156 @@
-import React from "react"
-import axios from "axios"
-import { useState } from "react"
-import { Button, Row, Col, Form, Modal } from "react-bootstrap"
-import {Data} from "../URL"
-import { useNavigate } from "react-router-dom"
-import './Add.css'
-const UpdateUser = ( id,
-  first_name,
-  last_name,
-  email,
-  is_verified,
-  image_url,
-  description,  ) => {
-  // const [data, setData] = useState("")
-  // const [error, setError] = useState("")
-  // const [image_url, setimage_url] = useState("")
-  // const [first_name, setfirst_name] = useState("")
-  // const [last_name, setlast_name] = useState("")
-  // const [email, setEmail] = useState("")
-  // const [description, setDescription] = useState("")
-  // const [is_verified, setis_verified] = useState("")
-  const [showModal, setShow] = useState(true)
-  
-  // const handleShow () => {
-  //   setShow(true);
-  // };
-  const [data, setData] = useState( id="",
-    first_name,
-    last_name,
-    email,
-    is_verified,
-    image_url,
-    description)
-  const Navigate = useNavigate()
-  const handleChange = (event) => {
-    setData({ ...data, [event.target.name]: event.target.value });
-  };
-  const handleClose = async (id) => {
 
-    try {
-      await axios.put(`http://localhost:3500/items/${id}`,Data );
-      console.log('Data updated successfully');
-    setData(handleClose.data)
-  } catch (error) {
-      console.error(error);
+// firstName,
+// lastName,
+// email,
+// is_verified,
+// imageUrl,
+// description
+
+import React, { useState, useEffect } from 'react';
+import { Button, Modal } from 'react-bootstrap';
+import { useMutation, useQuery } from 'react-query';
+import { getPhotoById, updatePhoto } from '../URL'; // Assuming you have an API function to get and update a photo
+import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import Spinner from './spinner';
+const UpdateUser = () => {
+  const [showModal, setShowModal] = useState(true);
+  const navigate = useNavigate();
+  const { id } = useParams()
+  const { data: existingPhoto, isLoading: photoLoading } = useQuery(
+    ['getPhoto', id],
+    () => getPhotoById(id)
+  );
+
+  const mutation = useMutation(updatePhoto(id), {
+    onSuccess: () => {
+      console.log('Image updated successfully');
+      setShowModal(false);
+      navigate('/photos');
+    },
+    onError: (error) => {
+      console.error('Error updating image:', error);
+    },
+  });
+
+  const [photoData, setPhotoData] = useState({
+    firstName: '',
+lastName:'',
+email:'',    description: '',
+    imageUrl: '',
+  });
+
+  useEffect(() => {
+    if (existingPhoto) {
+      setPhotoData({
+        firstName: existingPhoto.firstName,
+        lastName: existingPhoto.lastName,
+        email:existingPhoto.email,
+        description: existingPhoto.description,
+        // You might want to handle the image separately depending on your use case
+      });
     }
-   
-    Navigate('/')
+  }, [existingPhoto]);
+
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    mutation.mutate({ id, data: "getPhoto" });
+  };
+
+  const handleClose = () => {
+    setShowModal(false);
+    navigate('/');
+  };
+  console.log(photoData,"ext",id);
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    setPhotoData((prevData) => ({
+      ...prevData,
+      [name]: name === 'imageUrl' ? files[0] : value,
+    }));
+  };
+
+  if (photoLoading) {
+    return <><Spinner></Spinner></>
   }
+
   return (
-    <>
-  <div
-        className="modal show"
-        style={{ display: "block", position: "initial" }}
-      >
-        <Modal show={showModal} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Update Profile</Modal.Title>
-          </Modal.Header>
-          <Form>
-            <Modal.Body>
-              <div className="add-addform">
-              <div>
-                  <div className="addform">
-                    <label id="lastname" >url</label>
-                    <input 
-                    id="urlname"
-                      type="text"
-                      value={data.image_url}
-                      onChange={handleChange}
-                    /></div>
-                </div>
-                
-                  <div className="addform">
-                    <label id="fname">First Name </label>
-                    <input
-
-                            id="fname"
-                      type="text"
-                      value={data.first_name}
-                      onChange={handleChange}
-                    />
-                 </div>
-                 <div>
-                  <div className="addform">
-                    <label id="lastname" >Last Name</label>
-                    <input 
-                    id="lastname"
-                      type="text"
-                      value={data.last_name}
-                      onChange={handleChange}
-                    /></div>
-                </div>
-                <div className="addform">
-                    
-                    <label>Email</label>
-                    <input
-                      value={data.email}
-                      onChange={handleChange}
-                      type="email"
-                    />
-                  </div><div className="addform">
-                    <label>Description</label>
-                    <textarea
-                      as="textarea"
-                      value={data.description}
-                      onChange={handleChange}
-                      placeholder="write a description for a talent"
-                      
-                    /></div>
-                  
-                  <div
-                    style={{ backgroundColor: "#e3e3e3" }}
-                    className="form-check form-switch d-flex  p-1 justify-content-end"
-                  >
-                    <label className="verify"> Talent is Verified</label>
-                   
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      id="flexSwitchCheckChecked"
-                      onChange={data.is_verified}
-                    ></input>
-                  
-          </div>
-              </div>
-            </Modal.Body>   
-
-            <Modal.Footer>
-              <Button type="button" variant="primary" onClick={()=>handleClose(Data.id)}>
-              Update
-              </Button>
-            </Modal.Footer>
-          </Form>
-        </Modal>
-      </div> 
-      
-    </>
+    <div>
+      <Modal show={showModal} onHide={handleClose}>
+        <div className="modal-header bg-primary">
+          <h3 className="modal-title text-white m-3">Edit Profile</h3>
+          <button
+            type="button"
+            className="close rounded-circle p-2 bg-light "
+            onClick={handleClose}
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form onSubmit={handleUpdate}>
+          <Modal.Body>
+          
+            <div className="form-group">
+              <label className='font-weight-bold' htmlFor="name"> <h6 className='font-weight-bold'>First Name:</h6></label>
+              <input
+                type="text"
+                className="form-control"
+                id="name"
+                name="name"
+                value={photoData.firstName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="name"><h6 className='m-3'>Last Name:</h6></label>
+              <input
+                type="text"
+                className="form-control"
+                id="name"
+                name="name"
+                value={photoData.lastName}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="name"><h6 className='m-3'>Email:</h6></label>
+              <input
+                type="email"
+                className="form-control"
+                id="name"
+                name="name"
+                value={photoData.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="description"><h6 className='m-3'>Description:</h6></label>
+              <textarea
+                className="form-control"
+                id="description"
+                name="description"
+                value={photoData.description}
+                onChange={handleChange}
+              />
+            </div>
+            {/* You might want to handle the image separately based on your use case */}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button type="submit" variant="primary">
+              Update Image
+            </Button>
+            <Button variant="danger" onClick={handleClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </form>
+      </Modal>
+    </div>
   );
 };
+
 export default UpdateUser;

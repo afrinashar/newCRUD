@@ -1,80 +1,167 @@
-import { Button, NavDropdown, Table } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import BootstrapTable from 'react-bootstrap-table-next';
+import { getPhotos } from '../URL';
+import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
+import paginationFactory from 'react-bootstrap-table2-paginator';
+import ToolkitProvider, {Search} from 'react-bootstrap-table2-toolkit/dist/react-bootstrap-table2-toolkit';
 import {
+  BsListUl,
   BsThreeDotsVertical,
-  BsPatchCheckFill,
-  BsFillGearFill,
+  BsGrid3X3,
 } from "react-icons/bs";
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { Data } from "../URL";
-import DeleteUser from "./Delete";
-
-//import AddUser from './Components/Add'   c
-const Cards = () => {
-  const Navigate = useNavigate();
-  const EditUser = () => {
-    Navigate("/update");
-  };
-  const DeleteUser = () => {
-    Navigate("/delete");
-  };
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    async function getData() {
-      try {
-        const response = await axios.get("http://localhost:3500/items", Data);
-        setData(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Spinner from '../Components/spinner';
+  const StudentDetails = () => {
+    const { SearchBar } = Search;
+    const logOut = () => {
+      window.localStorage.clear();
+      window.location.href = "./sign-in";
+    };
+    const { data: student, isLoading,isError  } = useQuery('Student', getPhotos);
+    if (isLoading) {
+        return <><Spinner></Spinner></>
       }
-    }
-    getData();
-  }, []);
-  console.log(Data, "data");
-  return (
-    <>
-      <Table striped bordered hover size="sm">
-        <thead>
-          <tr style={{ backgroundColor: "blue",color:"white" }}>
-            <td>Name</td>
-            <td>Email</td>
-            <td>Description</td>
-            <td>
-              <BsFillGearFill style={{color:"white"}} />
-            </td>
-          </tr>
-        </thead>
-        <tbody  style={{backgroundColor:"ButtonShadow"}}>
-          {data.map((data) => (
-            <tr key={data.id}>
-              {" "}
-              <td>
-                {data.first_name} {data.last_name} {data.is_verifed}
-              </td>
-      
-              <td>{data.email}</td>
-              <td>{data.description}</td>
-              <td>
-                <div>
-                  <NavDropdown>
-                    <NavDropdown.Item style={{ border:"white" ,backgroundColor:"green",color:"white"}} onClick={EditUser}>Edit</NavDropdown.Item>
-                    <NavDropdown.Item style={{backgroundColor:"red",color:"white"}} onClick={DeleteUser}>
-                      Delete
-                    </NavDropdown.Item>
-                  </NavDropdown>
-                  
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      <Button></Button>uygyu
-    </>
-  );
+      var notifyError = () => toast.success("Logged In success");
+      //notifyError()
+      var notifySuccess = () => toast.success("Logged In success");
+  if (isError) {
+    return  <> 
+   
+    notifyError()
+    <div>Error fetching photos</div></>;
+  } 
+
+console.log(student,"stu");
+    const columns = [{
+  dataField: 'firstName',
+  text: 'FirstName',
+  sort: true, headerStyle: {
+    backgroundColor: '#004bff',
+    color:"#ffffff" 
+  }
+}, {
+  dataField: 'lastName',
+  text: 'Last Name',
+  sort: true, headerStyle: {
+    backgroundColor: '#004bff',
+    color:"#ffffff" 
+  }
+}, {
+  dataField: 'email',
+  text: 'Email',
+  sort: true, headerStyle: {
+    backgroundColor: '#004bff',
+    color:"#ffffff" 
+  }
+},{
+  dataField: 'description',
+  text: 'Description',
+  sort: true, headerStyle: {
+    backgroundColor: '#004bff',
+    color:"#ffffff" ,
+    
+  }
+} ,{
+  dataField: 'isVerified',
+  text: 'isVerified',
+  sort: true, headerStyle: {
+    backgroundColor: '#004bff',
+    color:"#ffffff" 
+  }
+},];
+const customTotal = (from, to, size) => (
+  <span className="react-bootstrap-table-pagination-total  ">
+    Showing <span className='text-primary'>{ from }</span> to <span className='text-primary'>{ to }</span> of <span className='text-primary text-bold'>{ size }</span> Results
+  </span>
+);
+
+const options = {
+  paginationSize: 4,
+  pageStartIndex: 0,
+  // alwaysShowAllBtns: true, // Always show next and previous button
+  // withFirstAndLast: false, // Hide the going to First and Last page button
+  // hideSizePerPage: true, // Hide the sizePerPage dropdown always
+  // hidePageListOnlyOnePage: true, // Hide the pagination list when only one page
+  firstPageText: 'First',
+  prePageText: 'Back',
+  nextPageText: 'Next',
+  lastPageText: 'Last',
+  nextPageTitle: 'First page',
+  prePageTitle: 'Pre page',
+  firstPageTitle: 'Next page',
+  lastPageTitle: 'Last page',
+  showTotal: true,
+  paginationTotalRenderer: customTotal,
+  disablePageTitle: true,
+  sizePerPageList: [{
+    text: '5', value: 5
+  }, {
+    text: '10', value: 10
+  }, {
+    text: 'All', value: student.length
+  }] // A numeric array is also available. the purpose of above example is custom the text
 };
-export default Cards;
+console.log(student,options,"sti");
+const rowStyle = { backgroundColor: '#eef2fc',color: '#000000'};
+
+ 
+  return (<>
+  <nav className="navbar   top-0 navbar-light sticky-top bg-primary"  >
+  <div className="container-fluid bg-primary top-0  sticky-top">
+   
+    <Link to="/create" className='btn btn-outline-light  '>Add </Link>
+    <Link className="btn btn-outline-light" to={"/"}>
+                      <BsListUl />
+                    </Link>
+                  
+                 
+                    <Link className="btn btn-outline-light" to={"/tables"}>
+                    <BsGrid3X3 className='' />
+                    </Link>
+                    <h1 className='text-white'>Celebrities Gallery</h1>
+    <form className="d-flex input-group w-auto">
+  
+      
+    </form>
+    <button className='btn btn-danger' onClick={logOut}> LOG OUT</button>
+  </div>
+</nav>
+   
+    <ToolkitProvider
+  keyField="Student"
+  data={ student }
+  columns={ columns }
+ 
+  search
+ 
+>
+  {
+    props => (
+      <div>
+       
+        <SearchBar className="border border-primary border-opacity-50 fluid" { ...props.searchProps } />
+        <hr />
+        <BootstrapTable  className="m-3"
+        rowStyle={ rowStyle }
+          { ...props.baseProps }
+        pagination={ paginationFactory(options) }  />
+      </div>
+    )
+  }
+</ToolkitProvider>
+<ToastContainer
+position="top-right"
+autoClose={5000}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="light"
+/>
+  </>)
+}
+export default StudentDetails
