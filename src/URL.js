@@ -3,7 +3,8 @@
 
 
 import axios from 'axios';
-export const API_BASE_URL = "http://16.171.239.100:3004";
+ export const API_BASE_URL = "http://16.171.239.100:3004";
+//export const API_BASE_URL = "http://localhost:3003";
 const api = axios.create({
   baseURL: API_BASE_URL,
 });

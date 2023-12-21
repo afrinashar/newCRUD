@@ -111,15 +111,15 @@ const rowStyle = { backgroundColor: '#eef2fc',color: '#000000'};
   <div className="container-fluid bg-primary top-0  sticky-top">
    
     <Link to="/create" className='btn btn-outline-light  '>Add </Link>
-    <Link className="btn btn-outline-light" to={"/"}>
+    <Link className="btn btn-outline-light" data-bs-toggle="tooltip" data-bs-html="true" title="CARD " to={"/"}>
                       <BsListUl />
                     </Link>
                   
                  
-                    <Link className="btn btn-outline-light" to={"/tables"}>
+                    <Link className="btn btn-outline-light" data-bs-toggle="tooltip" data-bs-html="true" title="TABLE " to={"/tables"}>
                     <BsGrid3X3 className='' />
                     </Link>
-                    <h1 className='text-white'>Celebrities Gallery</h1>
+                    <h1 className='text-white'>Gallery</h1>
     <form className="d-flex input-group w-auto">
   
       

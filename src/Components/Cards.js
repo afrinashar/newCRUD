@@ -110,7 +110,7 @@ const celeb = useRef();
       />
       
     </form>
-    <button onClick={logOut} className='btn btn-danger'>logOut</button>
+    <button onClick={logOut} className='btn btn-danger'>LogOut</button>
   </div>
 </nav>
       <div className="row p-5">
@@ -138,7 +138,7 @@ const celeb = useRef();
         <Modal.Footer>
 
         <div className='d-flex flex-row justify-content-around'><h6> </h6><p>{edit.description}</p>  </div>
-        <button className=' float-start m-1 btn btn-success rounded-circle border border-dark' onClick={() => handleDownload(edit.imageUrl, edit.title)}><FaArrowAltCircleDown/></button>
+        <button className=' float-start m-1  p-2 btn btn-outline-primary rounded-circle border border-primary d-flex justify-content-center align-items-center' data-bs-toggle="tooltip" data-bs-html="true" title="Download " onClick={() => handleDownload(edit.imageUrl, edit.title)}><FaArrowAltCircleDown/></button>
   <Button variant="outline-primary" onClick={handleClose}>
             Close
           </Button>  <DropdownButton  className=' '   >

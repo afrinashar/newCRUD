@@ -41,7 +41,7 @@ function App() {
                 <Route path="/sign-in" element={<Login />} />
           <Route path="/sign-up" element={<SignUp />} />
                 <Route exact path="/tables" element={<Tables />} />
-                <Route exact path="/delete/id" element={<DeleteUser />} />
+                <Route exact path="/delete/:id" element={<DeleteUser />} />
                 <Route exact path="/update/:id" element={<UpdateUser />} />
               </Routes>
               <Outlet />

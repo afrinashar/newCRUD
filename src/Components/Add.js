@@ -16,12 +16,13 @@ const CreatePhoto = () => {
     onSuccess: () => {
       queryClient.invalidateQueries('photos');
  var notifySuccess = () => toast.success('Image created successfully');
-     notifySuccess()
+     
  navigate('/');
+ notifySuccess()
     },
     onError: (error) => {
      
-        var notifyError = () => toast.error('Error creating image:', error.respose.data);
+        var notifyError = () => toast.error('Error creating image',error);
      notifyError()
     },
   });
@@ -96,10 +97,10 @@ console.log((e.target.files[0].name),"file");
               type="text"
               className="form-control"
               id="name"
-              name="name"
+              name="imageUrl"
               accept='image/png'
               //value={photoData.imageUrl}
-              onChange={handleChangePhoto}
+              onChange={handleChange}
               required
             />
           </div>
@@ -109,7 +110,7 @@ console.log((e.target.files[0].name),"file");
               type="text"
               className="form-control"
               id="name"
-              name="name"
+              name="firstName"
               value={photoData.firstName}
               onChange={handleChange}
               required
@@ -121,7 +122,7 @@ console.log((e.target.files[0].name),"file");
               type="text"
               className="form-control"
               id="name"
-              name="name"
+              name="lastName"
               value={photoData.lastName}
               onChange={handleChange}
               required
@@ -133,7 +134,7 @@ console.log((e.target.files[0].name),"file");
               type="email"
               className="form-control"
               id="name"
-              name="name"
+              name="email"
               value={photoData.email}
               onChange={handleChange}
               required

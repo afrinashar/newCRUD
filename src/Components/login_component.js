@@ -49,26 +49,28 @@ const navigation=useNavigate()
  var notifySuccess = () => toast.success("Logged In success");
  
   return (
-    <div className="auth-wrapper">
-      <div className="auth-inner d-flex justify-content-center align-items-center w-50 mt-5">
-    <Card className="card w-25 m-5 p-5 w-75 ">   <form onSubmit={handleSubmit}>
-          <h3>Log In</h3>
+    <div className="auth-wrapper d-flex justify-content-center align-items-center ">
+    <div className="auth-inner d-flex justify-content-center  align-items-center w-75 mt-5">
+   <div class="container-fluid  "> 
+      <form  className="  shadow-lg p-5 mb-5 bg-body rounded justify-content-space-between" onSubmit={handleSubmit}>
+           <h1 className="text-primary   d flex  justify-content-center align-items-center text-border border-dark     ">Log In</h1>
 
-          <div className="mb-3 h-25">
-            <label className="text-bold">Email address</label>
+          <div className="mb-3 p-2 h-25">
+            <label className=" md-text-light col-form-label col-form-label-sm">Email address</label>
             <input
               type="email"
-              className="form-control"
+              className="form-control form-control-sm w-100"
               placeholder="Enter email"
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
-          <div className="mb-3">
-            <label>Password</label>
+          <div className="mb-3 p-2">
+            <label  className="col-form-label col-form-label-sm" clsfor="password">Password</label>
             <input
+            id="password"
               type="password"
-              className="form-control"
+              className="form-control form-control-sm"
               placeholder="Enter password"
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -81,21 +83,21 @@ const navigation=useNavigate()
                 className="custom-control-input"
                 id="customCheck1"
               />
-              <label className="custom-control-label" htmlFor="customCheck1">
+              <label className="custom-control-label fw-lighter m-1" htmlFor="customCheck1">
                 Remember me
               </label>
             </div>
           </div>
-<div className="bottom float-end ">
-          <div className="  ">
-            <button type="submit" className="btn btn-primary float-end p-2 btn-sm active">
+<div className="bottom   ">
+          <div className=" ">
+            <button type="submit" className="btn btn-primary   float-start m-2  btn-sm border border-light active shadow-lg  p-2    rounded">
               Submit
             </button>
           </div>
-          <p className="forgot-password text-right">
-          Not yet to register  <a href="/sign-up"> Sign Up</a>
+          <p class="text-center text-muted mt-5 mb- fw-lighter">
+          Not register  <a className="fw-bold  text-body" href="/sign-up"> Sign Up</a>
           </p></div>
-        </form></Card> 
+        </form>  </div>
         <ToastContainer
 position="top-right"
 autoClose={5000}

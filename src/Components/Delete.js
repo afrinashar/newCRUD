@@ -1,52 +1,57 @@
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import { useNavigate } from "react-router-dom"
-import React, { useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { deletePhoto } from '../URL';
 import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Modal } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function DeleteUser() {
-  const Navigate = useNavigate() 
-  const [error,setError]= useState("")
-  const [Data, setData] = useState([]);
-  const closeButton=()=>{Navigate('/')}
+const DeleteUser = ({}) => {
+  const [showModal, setShowModal] = useState(true);
   const queryClient = useQueryClient();
   const { id } = useParams();
+  const navigate= useNavigate()
   const mutation = useMutation(() => deletePhoto(id), {
     onSuccess: () => {
       queryClient.invalidateQueries('photos');
+      console.log('Deleted successfully');
+      setShowModal(false)
+      notifySuccess()
+      navigate('/');
+      notifySuccess()
     },
   });
+ var notifySuccess= () => toast.success(" successfully Deleted");
 //console.log(photoId,"iddd");
   const handleDelete = () => {
-    mutation.mutate();
-  }
+    mutation.mutate( );
+    
+    notifySuccess()
 
+  };
+   var notifyError = () => toast.error("Delete Error");
+  const handleClose = () => {
+    //setShowModal(false); 
+
+  
+    navigate('/');
+       notifyError()
+  };
   return (
-  <> <div
-      className="modal show"
-      style={{ display: "block", position: "initial" }}
-    >
-      <Modal.Dialog>
-        <Modal.Header closeButton>
-          <Modal.Title>Remove profile</Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          <p>are you sure to delete</p>
-        </Modal.Body>
-
-        <Modal.Footer key={Data.id} >
-          <Button onClick={closeButton} variant="success">Close</Button>
-          <Button onClick={handleDelete} variant="danger">Delete</Button>
-        </Modal.Footer>
-      </Modal.Dialog>
-    </div>
-   <ToastContainer
+    <>
+      
+       <Modal show={showModal} onHide={handleClose}>
+<div className="modal-header">
+<h3 className='text- modal-title   '>DELETE photos</h3>
+</div>
+<div className="modal-body m-3 text-bold"> are you sure to delete </div>
+<div className="modal-footer">
+<button className='btn btn-success' onClick={handleDelete}>DELETE</button>
+<button className="btn btn-danger" onClick={handleClose}>CLOSE</button>
+</div>
+<ToastContainer
    position="top-right"
    autoClose={5000}
    hideProgressBar={false}
@@ -57,7 +62,11 @@ function DeleteUser() {
    draggable
    pauseOnHover
    theme="light"
-   /></>  );
-}
+   />
+       </Modal>
+       
+    </>
+  );
+};
 
 export default DeleteUser;

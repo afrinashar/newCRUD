@@ -22,7 +22,7 @@ const UpdateUser = () => {
     () => getPhotoById(id)
   );
 
-  const mutation = useMutation(updatePhoto(id), {
+  const mutation = useMutation(id,updatePhoto(id), {
     onSuccess: () => {
       console.log('Image updated successfully');
       setShowModal(false);
@@ -54,7 +54,7 @@ email:'',    description: '',
 
   const handleUpdate = (e) => {
     e.preventDefault();
-    mutation.mutate({ id, data: "getPhoto" });
+    mutation.mutate({ id, data: photoData });
   };
 
   const handleClose = () => {
@@ -92,36 +92,36 @@ email:'',    description: '',
           <Modal.Body>
           
             <div className="form-group">
-              <label className='font-weight-bold' htmlFor="name"> <h6 className='font-weight-bold'>First Name:</h6></label>
+              <label className='font-weight-bold' htmlFor="firstName"> <h6 className='font-weight-bold'>First Name:</h6></label>
               <input
                 type="text"
                 className="form-control"
                 id="name"
-                name="name"
+                name="firstName"
                 value={photoData.firstName}
                 onChange={handleChange}
                 required
               />
             </div>
             <div className="form-group">
-              <label htmlFor="name"><h6 className='m-3'>Last Name:</h6></label>
+              <label htmlFor="lastName"><h6 className='m-3'>Last Name:</h6></label>
               <input
                 type="text"
                 className="form-control"
                 id="name"
-                name="name"
+                name="lastName"
                 value={photoData.lastName}
                 onChange={handleChange}
                 required
               />
             </div>
             <div className="form-group">
-              <label htmlFor="name"><h6 className='m-3'>Email:</h6></label>
+              <label htmlFor="email"><h6 className='m-3'>Email:</h6></label>
               <input
                 type="email"
                 className="form-control"
                 id="name"
-                name="name"
+                name="email"
                 value={photoData.email}
                 onChange={handleChange}
                 required
